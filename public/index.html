@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>剧本杀 AI 选角助手</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <main class="app">
+    <header class="hero">
+      <div>
+        <p class="eyebrow">Persona-Driven Role Matcher</p>
+        <h1>🎭 剧本杀 AI 选角助手</h1>
+        <p class="intro">填写你的用户画像、记录过往剧本角色，Agent 结合全部信息为你精准推荐。</p>
+      </div>
+      <div class="status" id="systemStatus">就绪</div>
+    </header>
+
+    <nav class="tabs" id="mainTabs">
+      <button class="tab active" data-tab="persona">👤 用户画像</button>
+      <button class="tab" data-tab="records">📋 角色记录</button>
+      <button class="tab" data-tab="chat">💬 对话选角</button>
+    </nav>
+
+    <!-- ══════════════════ 用户画像 ══════════════════ -->
+    <section class="panel active" id="persona">
+      <div class="panelHead">
+        <h2>你的用户画像</h2>
+        <p>这些信息会被 Agent 用于理解你的偏好。随时可以修改。</p>
+      </div>
+
+      <div class="formGrid">
+        <label class="field">
+          <span>MBTI</span>
+          <input id="mbti" placeholder="例如：INFP" />
+        </label>
+        <label class="field">
+          <span>星座</span>
+          <input id="zodiac" placeholder="例如：天蝎座" />
+        </label>
+        <label class="field">
+          <span>性别</span>
+          <select id="gender">
+            <option value="">不限</option>
+            <option value="女">女</option>
+            <option value="男">男</option>
+          </select>
+        </label>
+        <label class="field">
+          <span>是否接受反串</span>
+          <select id="crossGender">
+            <option value="no">不接受</option>
+            <option value="maybe">可以考虑</option>
+            <option value="yes">接受</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="choiceBlock">
+        <h3>偏好的情感线</h3>
+        <div class="chips" data-field="preferredLines">
+          <button>爱情</button><button>亲情</button><button>友情</button>
+          <button>成长</button><button>救赎</button><button>遗憾</button>
+          <button>家国</button><button>事业</button><button>守护</button>
+        </div>
+      </div>
+
+      <div class="choiceBlock">
+        <h3>偏好的角色气质</h3>
+        <div class="chips" data-field="preferredTraits">
+          <button>敏感</button><button>隐忍</button><button>克制</button>
+          <button>主动</button><button>外放</button><button>理性</button>
+          <button>守护</button><button>强势</button><button>温柔</button>
+          <button>独立</button><button>慢热</button><button>高共情</button>
+        </div>
+      </div>
+
+      <div class="choiceBlock">
+        <h3>雷点（不想碰到的内容）</h3>
+        <div class="chips" data-field="avoidTags">
+          <button>卑微</button><button>恋爱脑</button><button>原生家庭</button>
+          <button>背叛</button><button>出轨</button><button>大量输出</button>
+          <button>角色边缘</button><button>疯批</button>
+        </div>
+      </div>
+
+      <label class="field">
+        <span>自定义标签 / 补充说明</span>
+        <textarea id="freeText" rows="3" placeholder="例如：水龙头、外冷内热、喜欢虐恋、讨厌说教……"></textarea>
+      </label>
+
+      <div class="actionRow">
+        <button class="primary" id="savePersonaBtn">💾 保存画像</button>
+        <span class="saveHint" id="personaHint"></span>
+      </div>
+
+      <div class="personaPreview" id="personaPreview" style="display:none">
+        <h3>🧠 Agent 眼中的你</h3>
+        <div id="personaSummary"></div>
+      </div>
+    </section>
+
+    <!-- ══════════════════ 角色记录 ══════════════════ -->
+    <section class="panel" id="records">
+      <div class="panelHead">
+        <h2>剧本杀角色记录</h2>
+        <p>记录你打过的剧本和扮演的角色，帮助 Agent 更懂你的口味。</p>
+      </div>
+
+      <button class="primary" id="showFormBtn">➕ 添加记录</button>
+
+      <div class="recordForm" id="recordForm" style="display:none">
+        <div class="formGrid">
+          <label class="field">
+            <span>剧本名称</span>
+            <input id="recScript" placeholder="例如：告别诗" />
+          </label>
+          <label class="field">
+            <span>扮演角色</span>
+            <input id="recRole" placeholder="例如：林星落" />
+          </label>
+          <label class="field">
+            <span>评分（1-10）</span>
+            <input id="recRating" type="number" min="1" max="10" placeholder="8" />
+          </label>
+          <label class="field">
+            <span>标签（可选）</span>
+            <input id="recTags" placeholder="例如：虐恋、纯爱、高输出" />
+          </label>
+        </div>
+        <label class="field">
+          <span>评价 / 感受</span>
+          <textarea id="recReview" rows="2" placeholder="喜欢这个角色的什么？不喜欢什么？……"></textarea>
+        </label>
+        <div class="recordFormActions">
+          <button class="primary" id="saveRecordBtn">💾 保存记录</button>
+          <button class="secondary" id="cancelFormBtn">取消</button>
+          <input type="hidden" id="editRecordId" />
+        </div>
+      </div>
+
+      <div class="recordsList" id="recordsList">
+        <p class="emptyHint" id="recordsEmpty">还没有记录。打过的本子上来记一笔吧～</p>
+      </div>
+    </section>
+
+    <!-- ══════════════════ 对话 ══════════════════ -->
+    <section class="panel" id="chat">
+      <div class="chatLayout">
+        <div class="chatMain">
+          <div class="chatBox" id="chatBox">
+            <div class="chatBubble assistant">
+              你好！我是 AI 选角助手 🎭<br><br>
+              告诉我你想玩的剧本，我会结合你的<strong>用户画像</strong>和<strong>历史角色记录</strong>，帮你找到最合适的角色。
+            </div>
+          </div>
+          <div class="chatInput">
+            <input id="chatInput" placeholder="例如：我想玩告别诗，帮我选个适合我的角色～" />
+            <button class="primary" id="chatSend">发送</button>
+          </div>
+          <div class="chatHint">
+            💡 试试：<em>"帮我选古木吟的角色"</em> · <em>"来电适合我吗？"</em> · <em>"对比一下苏橙和顾言"</em>
+          </div>
+        </div>
+        <aside class="chatContext" id="chatContext">
+          <h4>📊 Agent 上下文</h4>
+          <div id="ctxPersona"><em>尚未填写用户画像</em></div>
+          <hr />
+          <div id="ctxRecords"><em>暂无角色记录</em></div>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <script type="module" src="/app.js"></script>
+</body>
+</html>

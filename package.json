@@ -1,0 +1,13 @@
+{
+  "name": "script-kill-role-matcher",
+  "version": "0.1.0",
+  "private": true,
+  "description": "MVP for recommending jubensha emotional-script roles from public summaries and player preferences.",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
