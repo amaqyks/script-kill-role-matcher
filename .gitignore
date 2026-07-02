@@ -1,0 +1,5 @@
+﻿node_modules/
+data/vectors.json
+.env
+.env.local
+*.log
