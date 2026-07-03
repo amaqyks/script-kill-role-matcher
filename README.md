@@ -2,6 +2,14 @@
 
 基于 **ReAct 多 Agent 协作 + RAG 检索增强** 的剧本杀角色推荐系统。输入剧本名，系统自动搜索小红书/迷圈/千岛/抖音公开评测，结合玩家 MBTI/星座/偏好画像，给出可解释的角色推荐。
 
+## 📖 文档
+
+- **[PRD](docs/PRD.md)** — 用户、场景、需求分析、产品流程、核心指标
+- **[Agent 设计](docs/agent-design.md)** — 5 个 Agent 的职责、输入输出、触发条件、协作关系
+- **[Prompt 设计](docs/prompt-design.md)** — 关键 System Prompt 的设计思路与取舍
+- **[架构图](docs/architecture.md)** — 数据流、决策流、评分引擎、索引结构（Mermaid）
+- **[演示指南](docs/demo.md)** — 截图/GIF 制作说明
+
 ## 架构概览
 
 ```mermaid
@@ -127,7 +135,13 @@ npm start
 │   ├── questionAgent.js        # 动态追问生成
 │   ├── matchAgent.js           # 多维匹配评分引擎
 │   └── personaMapper.js        # MBTI/星座/标签 → 特征信号映射
+├── docs/                       # 产品与技术文档
+│   ├── PRD.md
+│   ├── agent-design.md
+│   ├── prompt-design.md
+│   ├── architecture.md
+│   └── demo.md
 ├── public/                     # 前端页面
-├── data/                       # 运行时数据
+├── data/                       # 运行时数据（不纳入版本控制）
 └── package.json
 ```
