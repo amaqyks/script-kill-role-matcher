@@ -8,7 +8,6 @@
 - **[Agent 设计](docs/agent-design.md)** — 5 个 Agent 的职责、输入输出、触发条件、协作关系
 - **[Prompt 设计](docs/prompt-design.md)** — 关键 System Prompt 的设计思路与取舍
 - **[架构图](docs/architecture.md)** — 数据流、决策流、评分引擎、索引结构（Mermaid）
-- **[演示指南](docs/demo.md)** — 截图/GIF 制作说明
 
 ## 架构概览
 
